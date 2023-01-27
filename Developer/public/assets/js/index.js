@@ -4,6 +4,29 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const PORT = 3001;
+
+//middleware
+app.use(express.static('public'));
+
+//add more in response
+app.get('/', (req, res) => res.send('Navigate to /notes'));
+
+// navigate to notes page
+app.get('/send', (req, res) =>
+res.sendFile(path.join(__dirname, 'public/notes.html'))
+);
+
+//listen at port
+app.listen(PORT, () => 
+console.log(`Example app listening at http://localhost:${PORT}`)
+);
+
+// starter code throwing error
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
@@ -173,6 +196,7 @@ const renderNoteList = async (notes) => {
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
+//starter code throwing error
 if (window.location.pathname === '/notes') {
   saveNoteBtn.addEventListener('click', handleNoteSave);
   newNoteBtn.addEventListener('click', handleNewNoteView);
