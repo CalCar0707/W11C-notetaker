@@ -4,36 +4,41 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+//boilerplate
 const express = require('express');
 const path = require('path');
 
 const app = express();
 const PORT = 3001;
 
+const notes = require('./notes.html');
+
 //middleware
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 //add more in response
 app.get('/', (req, res) => res.send('Navigate to /notes'));
 
 // navigate to notes page
-app.get('/send', (req, res) =>
+app.get('/notes', (req, res) =>
 res.sendFile(path.join(__dirname, 'public/notes.html'))
 );
 
 //listen at port
 app.listen(PORT, () => 
 console.log(`Example app listening at http://localhost:${PORT}`)
-);
+);  
 
 // starter code throwing error
-if (window.location.pathname === '/notes') {
-  noteTitle = document.querySelector('.note-title');
-  noteText = document.querySelector('.note-textarea');
-  saveNoteBtn = document.querySelector('.save-note');
-  newNoteBtn = document.querySelector('.new-note');
-  noteList = document.querySelectorAll('.list-container .list-group');
-}
+//if (window.location.pathname === '/notes') {
+  //noteTitle = document.querySelector('.note-title');
+  //noteText = document.querySelector('.note-textarea');
+  //saveNoteBtn = document.querySelector('.save-note');
+  //newNoteBtn = document.querySelector('.new-note');
+  //noteList = document.querySelectorAll('.list-container .list-group');
+//}
 
 // Show an element
 const show = (elem) => {
@@ -197,11 +202,11 @@ const renderNoteList = async (notes) => {
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
 //starter code throwing error
-if (window.location.pathname === '/notes') {
-  saveNoteBtn.addEventListener('click', handleNoteSave);
-  newNoteBtn.addEventListener('click', handleNewNoteView);
-  noteTitle.addEventListener('keyup', handleRenderSaveBtn);
-  noteText.addEventListener('keyup', handleRenderSaveBtn);
-}
+//if (window.location.pathname === '/notes') {
+  //saveNoteBtn.addEventListener('click', handleNoteSave);
+  //newNoteBtn.addEventListener('click', handleNewNoteView);
+  //noteTitle.addEventListener('keyup', handleRenderSaveBtn);
+  //noteText.addEventListener('keyup', handleRenderSaveBtn);
+//}
 
 getAndRenderNotes();
