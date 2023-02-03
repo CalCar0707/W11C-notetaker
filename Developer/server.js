@@ -30,6 +30,7 @@ app.get('/notes', (req, res) =>
 res.sendFile(path.join(__dirname, 'public/notes.html'))
 );
 
+
 //reads db.json file and returns as json
 app.get('/api/notes', (req, res) =>
     res.json(database)
@@ -38,20 +39,23 @@ app.get('/api/notes', (req, res) =>
 //receives a new note to save on request body, add to db.json, and return new note to client
 app.post('/api/notes', (req, res) => {
     // Log that a POST request was received
-    console.info(`${req.method} request received to add a note.`);
+    console.info(`${req.method} request received to add a newnote.`);
   
     const {title, text} = req.body;
 
     if(title && text ) {
-        fs.readFile('./db/db.json', 'utf8', (error, data) => {
-            const parsedNotesArray = data ? JSON.parse(data) : [];
-            const notes = parsedNotesArray || [];
         
         const newNote = {
             title,
             text,
             review_id: uuidv4(),
         };
+        
+        
+        fs.readFile('./db/db.json', 'utf8', (error, data) => {
+            const parsedNotesArray = data ? JSON.parse(data) : [];
+            const notes = parsedNotesArray || [];
+    
 
         notes.push(newNote);
 
@@ -64,6 +68,7 @@ app.post('/api/notes', (req, res) => {
                  ? console.error(err)
                 : console.log(
                   `Note for ${newNote.title} has been written to JSON file`
+
         )
   );
             
@@ -90,10 +95,7 @@ app.post('/api/notes', (req, res) => {
 // for(let i = 0; i < database.length; i++){
 
 //}
-// uuid for uniquie id for notes
-//app.get('*', (req, res) => 
-//res.sendFile(path.join(__dirname, 'public/index.html'))
-//);
+
 
 //listen at port
 app.listen(PORT, () => 
