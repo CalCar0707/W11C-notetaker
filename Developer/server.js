@@ -1,10 +1,12 @@
 //boilerplate
+//const { response } = require('express');
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 //uuid for generating a unique note id
 const { v4: uuidv4 } = require('uuid');
-uuidv4(); 
+
 
 const database = require('./db/db.json');
 
@@ -15,9 +17,10 @@ const PORT = 3001;
 
 
 //middleware
-app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
+
+app.use(express.static('public'));
 
 //add more in response
 app.get('/', (req, res) => res.send('Navigate to /notes'));
@@ -37,19 +40,49 @@ app.post('/api/notes', (req, res) => {
     // Log that a POST request was received
     console.info(`${req.method} request received to add a note.`);
   
-    // Check if there is anything in the response body
-    if (req.body && req.body.title) {
-      response = {
-        status: 'success',
-        data: req.body,
-      };
-      res.json(`Note: ${response.data.title}, ${response.data.text} has been added!`);
-    } else {
-      res.json('Note must contain a title and text.');
+    const {title, text} = req.body;
+
+    if(title && text ) {
+        fs.readFile('./db/db.json', 'utf8', (error, data) => {
+            const parsedNotesArray = data ? JSON.parse(data) : [];
+            const notes = parsedNotesArray || [];
+        
+        const newNote = {
+            title,
+            text,
+            review_id: uuidv4(),
+        };
+
+        notes.push(newNote);
+
+        // Convert the data to a string so we can save it
+        const noteString = JSON.stringify(notes);
+
+                // Write the string to a file-- COPY PASTE HAVE NOT WORKED ON
+            fs.writeFile('./db/db.json', noteString, (err) =>
+                err
+                 ? console.error(err)
+                : console.log(
+                  `Note for ${newNote.title} has been written to JSON file`
+        )
+  );
+            
+
+        const response = {
+            status: 'success',
+            body: newNote,
+        };
+
+        //res.json(`Note: ${response.body.title}, ${response.body.text} has been added!`);
+        res.status(201).json(response);
+    })
+        } else {
+            res.status(500).json('Note must contain a title and text.');
+        
     }
-  
+    
     // Log the response body to the console
-    console.log(req.body);
+   // console.log(response);
 
 });
 
