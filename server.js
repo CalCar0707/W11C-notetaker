@@ -64,14 +64,16 @@ app.post('/api/notes', (req, res) => {
 
 
                 // Write the string to a file-- COPY PASTE HAVE NOT WORKED ON
-            fs.writeFile('./db/db.json', noteString, (err) =>
-                err
-                 ? console.error(err)
-                : console.log(
+            fs.writeFile('./db/db.json', noteString, (err) => {
+                if(err) {
+                 console.error(err)
+                } else {
+                
+                 console.log(
                   `Note for ${newNote.title} has been written to JSON file`
-
-        )
-  );
+                 
+        )}
+                  } );
             
 
         const response = {
