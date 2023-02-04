@@ -62,6 +62,7 @@ app.post('/api/notes', (req, res) => {
         // Convert the data to a string so we can save it
         const noteString = JSON.stringify(notes);
 
+
                 // Write the string to a file-- COPY PASTE HAVE NOT WORKED ON
             fs.writeFile('./db/db.json', noteString, (err) =>
                 err
@@ -87,14 +88,10 @@ app.post('/api/notes', (req, res) => {
     }
     
     // Log the response body to the console
-   // console.log(response);
+    //console.log(res);
 
 });
 
-//for loop for notes entered
-// for(let i = 0; i < database.length; i++){
-
-//}
 
 
 //listen at port
